@@ -11,7 +11,6 @@ namespace traveling_salesman_problem
 
             anthill.FindGoodTravel();
 
-
             Console.ReadKey();
         }
     }
