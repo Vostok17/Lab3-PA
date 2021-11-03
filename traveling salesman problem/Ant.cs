@@ -16,27 +16,34 @@ namespace traveling_salesman_problem
         public Ant(int startLocation)
         {
             start = startLocation;
+            location = start;
             ValueOfPath = 0;
         }
         public void Step(Graph pheromone, Graph distance, double alpha, double beta)
         {
-            List<double> neighbours = new();
+            Path.Add(location);
+            visited.Add(location);
+
+            Dictionary<int, double> neighbours = new();
             for (int i = 0; i < distance.Size; i++)
             {
                 if (!visited.Contains(i))
                 {
                     double probability = Math.Pow(pheromone[location, i], alpha) + Math.Pow(1 / distance[location, i], beta);
-                    neighbours.Add(probability);
+                    neighbours.Add(i, probability);
                 }
             }
-            double maxProbability = neighbours.Max();
-            int nextVertex = neighbours.IndexOf(maxProbability);
+            int nextVertex = neighbours.FirstOrDefault(x => x.Value == neighbours.Values.Max()).Key;
 
-            Path.Add(location);
-            ValueOfPath += distance[location, nextVertex];
-            visited.Add(location);
-
-            location = nextVertex;
+            if (neighbours.Count != 0) 
+            {
+                ValueOfPath += distance[location, nextVertex];
+                location = nextVertex;
+            }
+            else // must return to start
+            {
+                ValueOfPath += distance[location, start];
+            }
         }
         public int GetVisited() { return visited.Count; }
     }

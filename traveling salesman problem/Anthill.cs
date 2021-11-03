@@ -65,11 +65,9 @@ namespace traveling_salesman_problem
             }
             return Lmin;
         }
-
-        // UNDONE 
         public void FindGoodTravel()
         {
-            const int ITERATIONS = 1;
+            const int ITERATIONS = 1000;
             for (int k = 0; k < ITERATIONS; k++)
             {
                 List<Ant> ants = CreateAnts();
