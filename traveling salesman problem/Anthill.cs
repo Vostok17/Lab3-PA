@@ -1,8 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace traveling_salesman_problem
 {
@@ -12,28 +9,28 @@ namespace traveling_salesman_problem
         private Graph pheromone;
 
         // algorithm properties 
-        private const double ALPHA = 2;
-        private const double BETA = 3;
-        private const double STARTING_PHEROMON = 1;
-        private const double PHEROMON_EVAPORATION = 0.4;
+        private readonly double alpha = 2;
+        private readonly double beta = 3;
+        private readonly double startingPheromon = 1;
+        private readonly double pheromonEvaporation = 0.4;
         private double Lmin;
-        private const int M = 35; // num of ants
+        private readonly int numberOfAnts = 35; // num of ants
 
         Random random = new Random();
         public Anthill(Graph distance)
         {
             this.distance = distance;
             pheromone = new Graph(distance.Size);
-            InitPheromone(STARTING_PHEROMON);
+            InitPheromone(startingPheromon);
             Lmin = GreedySearch();
         }
         private void InitPheromone(double startingPheromon)
         {
             for (int i = 0; i < pheromone.Size; i++)
             {
-                for (int j = 0; j < pheromone.Size; j++)
+                for (int j = i + 1; j < pheromone.Size; j++)
                 {
-                    pheromone[i, j] = startingPheromon;
+                    pheromone[i, j] = pheromone[j, i] = startingPheromon;
                 }
             }
         }
@@ -73,39 +70,42 @@ namespace traveling_salesman_problem
                 List<Ant> ants = CreateAnts();
                 foreach (var ant in ants)
                 {
-                    while (ant.GetVisited() < distance.Size) // not all vertexes were visited
+                    while (ant.GetVisited() < distance.Size) // all vertexes were visited
                     {
-                        ant.Step(pheromone, distance, ALPHA, BETA);
+                        ant.Step(pheromone, distance, alpha, beta);
                     }
-                    LayPheromon(ant.Path);
-                    Evaporate();
                 }
+                RenewPheromon(ants);
             }
         }
         private List<Ant> CreateAnts()
         {
             List<Ant> ants = new();
-            for (int i = 0; i < M; i++)
+            for (int i = 0; i < numberOfAnts; i++)
             {
                 int startLocation = random.Next(distance.Size);
                 ants.Add(new Ant(startLocation));
             }
             return ants;
         }
-        private void LayPheromon(List<int> path)
+        private void RenewPheromon(List<Ant> ants)
         {
-            for (int i = 1; i < path.Count; i++)
-            {
-                pheromone[path[i - 1], path[i]] += Lmin / path.Count;
-            }
-        }
-        private void Evaporate()
-        {
+            // evaporate
             for (int i = 0; i < distance.Size; i++)
             {
-                for (int j = 0; j < distance.Size; j++)
+                for (int j = i + 1; j < distance.Size; j++)
                 {
-                    pheromone[i, j] *= 1 - PHEROMON_EVAPORATION;
+                    pheromone[i, j] = pheromone[j, i] *= 1 - pheromonEvaporation;
+                }
+            }
+            //lay pheromon
+            foreach (var ant in ants)
+            {
+                for (int i = 1; i < ant.Path.Count; i++)
+                {
+                    int cur = ant.Path[i - 1];
+                    int next = ant.Path[i];
+                    pheromone[cur, next] = pheromone[next, cur] += Lmin / ant.ValueOfPath;
                 }
             }
         }

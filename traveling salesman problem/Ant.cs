@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace traveling_salesman_problem
 {
@@ -35,13 +33,14 @@ namespace traveling_salesman_problem
             }
             int nextVertex = neighbours.FirstOrDefault(x => x.Value == neighbours.Values.Max()).Key;
 
-            if (neighbours.Count != 0) 
+            if (neighbours.Count != 0)
             {
                 ValueOfPath += distance[location, nextVertex];
                 location = nextVertex;
             }
             else // must return to start
             {
+                Path.Add(start);
                 ValueOfPath += distance[location, start];
             }
         }
