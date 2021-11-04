@@ -22,18 +22,22 @@ namespace traveling_salesman_problem
             Path.Add(location);
             visited.Add(location);
 
-            Dictionary<int, double> neighbours = new();
+            int nextVertex = int.MaxValue;
+            double maxProbability = double.MinValue;
             for (int i = 0; i < distance.Size; i++)
             {
                 if (!visited.Contains(i))
                 {
                     double probability = Math.Pow(pheromone[location, i], alpha) + Math.Pow(1 / distance[location, i], beta);
-                    neighbours.Add(i, probability);
+                    if (probability > maxProbability)
+                    {
+                        maxProbability = probability;
+                        nextVertex = i;
+                    }
                 }
             }
-            int nextVertex = neighbours.FirstOrDefault(x => x.Value == neighbours.Values.Max()).Key;
 
-            if (neighbours.Count != 0)
+            if (nextVertex != int.MaxValue)
             {
                 ValueOfPath += distance[location, nextVertex];
                 location = nextVertex;
