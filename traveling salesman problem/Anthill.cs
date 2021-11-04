@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 
 namespace traveling_salesman_problem
@@ -12,12 +13,13 @@ namespace traveling_salesman_problem
         // algorithm properties 
         private readonly int alpha = 2;
         private readonly int beta = 3;
-        private readonly double startingPheromon = 100;
+        private readonly double startingPheromon = 1;
         private readonly double pheromonEvaporation = 0.4;
-        public int Lmin { get; private set; }
+        private int Lmin;
         private readonly int numberOfAnts = 35;
 
         private Random random = new Random();
+        public List<int> Result { get; private set; } = new();
         public Anthill(Graph graph)
         {
             distance = graph;
@@ -67,8 +69,10 @@ namespace traveling_salesman_problem
         }
         public void FindGoodTravel()
         {
-            List<int> bestPath = new();
-            double bestValueOfPath = int.MaxValue;
+            Stopwatch time = new Stopwatch();
+            time.Start();
+            
+            double bestPathValue = int.MaxValue;
 
             const int ITERATIONS = 1000;
             for (int k = 0; k <= ITERATIONS; k++)
@@ -83,16 +87,28 @@ namespace traveling_salesman_problem
                 }
                 RenewPheromon(ants);
 
-                double path = ants.Min(x => x.ValueOfPath);
-                if (path < bestValueOfPath)
+                Ant shortPath = ants.Min(); // ant with shortest path on this iteration
+
+                if (shortPath.ValueOfPath < bestPathValue)
                 {
-                    bestValueOfPath = path;
+                    bestPathValue = shortPath.ValueOfPath;
+                    Result = shortPath.Path;
                 }
-                if (k % 20 == 0)
+                if (k % 20 == 0 || k < 10)
                 {
-                    Console.WriteLine($"{k}. {bestValueOfPath}");
+                    Console.WriteLine($"{k}. {bestPathValue}");
                 }
             }
+
+            // statistics
+            Console.WriteLine("Lmin = {0}", Lmin);
+            foreach (var item in Result)
+            {
+                Console.Write(item + "-");
+            }
+            Console.WriteLine();
+            time.Stop();
+            Console.WriteLine($"time: {time.Elapsed}");
         }
         private List<Ant> CreateAnts()
         {
