@@ -10,14 +10,14 @@ namespace traveling_salesman_problem
         private int start;
         public List<int> Path { get; set; } = new();
         private HashSet<int> visited = new();
-        public double ValueOfPath { get; private set; }
+        public int ValueOfPath { get; private set; }
         public Ant(int startLocation)
         {
             start = startLocation;
             location = start;
             ValueOfPath = 0;
         }
-        public void Step(Graph pheromone, Graph distance, double alpha, double beta)
+        public void Step(double[,] pheromone, Graph distance, int alpha, int beta)
         {
             Path.Add(location);
             visited.Add(location);
@@ -28,7 +28,7 @@ namespace traveling_salesman_problem
             {
                 if (!visited.Contains(i))
                 {
-                    double probability = Math.Pow(pheromone[location, i], alpha) + Math.Pow(1 / distance[location, i], beta);
+                    double probability = Math.Pow(pheromone[location, i], alpha) + Math.Pow((double)1 / distance[location, i], beta);
                     if (probability > maxProbability)
                     {
                         maxProbability = probability;
@@ -47,6 +47,6 @@ namespace traveling_salesman_problem
                 ValueOfPath += distance[location, start];
             }
         }
-        public int GetVisited() { return visited.Count; }
+        public int GetVisited() => visited.Count;
     }
 }

@@ -6,41 +6,49 @@ namespace traveling_salesman_problem
 {
     internal class Anthill
     {
-        private Graph distance;
-        private Graph pheromone;
+        private Graph distance; // graph
+        private double[,] pheromone;
 
         // algorithm properties 
-        private readonly double alpha = 2;
-        private readonly double beta = 3;
-        private readonly double startingPheromon = 1;
+        private readonly int alpha = 2;
+        private readonly int beta = 3;
+        private readonly double startingPheromon = 100;
         private readonly double pheromonEvaporation = 0.4;
-        public double Lmin { get; private set; }
-        private readonly int numberOfAnts = 35; // num of ants
+        public int Lmin { get; private set; }
+        private readonly int numberOfAnts = 35;
 
-        Random random = new Random();
-        public Anthill(Graph distance)
+        private Random random = new Random();
+        public Anthill(Graph graph)
         {
-            this.distance = distance;
-            pheromone = new Graph(distance.Size);
-            InitPheromone(startingPheromon);
+            distance = graph;
+            InitPheromone();
             Lmin = GreedySearch();
         }
-        private void InitPheromone(double startingPheromon)
+        private void InitPheromone()
         {
-            pheromone.Fill(startingPheromon);
+            int size = distance.Size;
+            pheromone = new double[size, size];
+
+            for (int i = 0; i < size; i++)
+            {
+                for (int j = i + 1; j < size; j++)
+                {
+                    pheromone[i, j] = pheromone[j, i] = startingPheromon;
+                }
+            }
         }
-        private double GreedySearch()
+        private int GreedySearch()
         {
             HashSet<int> visited = new();
-            double Lmin = 0;
+            int Lmin = 0;
             int size = distance.Size;
-            int cur = random.Next(size); // start from 
+            int cur = random.Next(size); // start from random vertex
             int closestVertex = cur;
 
             for (int k = 0; k < size; k++)
             {
                 visited.Add(cur);
-                double min = double.MaxValue;
+                int min = int.MaxValue;
                 for (int i = 0; i < size; i++)
                 {
                     if (distance[cur, i] < min && !visited.Contains(i))
@@ -63,7 +71,7 @@ namespace traveling_salesman_problem
             double bestValueOfPath = int.MaxValue;
 
             const int ITERATIONS = 1000;
-            for (int k = 0; k < ITERATIONS; k++)
+            for (int k = 0; k <= ITERATIONS; k++)
             {
                 List<Ant> ants = CreateAnts();
                 foreach (var ant in ants)
@@ -113,7 +121,7 @@ namespace traveling_salesman_problem
                 {
                     int cur = ant.Path[i - 1];
                     int next = ant.Path[i];
-                    pheromone[cur, next] = pheromone[next, cur] += Lmin / ant.ValueOfPath;
+                    pheromone[cur, next] = pheromone[next, cur] += (double)Lmin / ant.ValueOfPath;
                 }
             }
         }
