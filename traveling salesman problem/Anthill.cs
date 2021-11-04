@@ -82,7 +82,7 @@ namespace traveling_salesman_problem
                 }
                 if (k % 20 == 0)
                 {
-                    Console.WriteLine(bestValueOfPath);
+                    Console.WriteLine($"{k}. {bestValueOfPath}");
                 }
             }
         }
