@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace traveling_salesman_problem
 {
@@ -13,7 +14,7 @@ namespace traveling_salesman_problem
         private readonly double beta = 3;
         private readonly double startingPheromon = 1;
         private readonly double pheromonEvaporation = 0.4;
-        private double Lmin;
+        public double Lmin { get; private set; }
         private readonly int numberOfAnts = 35; // num of ants
 
         Random random = new Random();
@@ -58,6 +59,9 @@ namespace traveling_salesman_problem
         }
         public void FindGoodTravel()
         {
+            List<int> bestPath = new();
+            double bestValueOfPath = int.MaxValue;
+
             const int ITERATIONS = 1000;
             for (int k = 0; k < ITERATIONS; k++)
             {
@@ -70,6 +74,16 @@ namespace traveling_salesman_problem
                     }
                 }
                 RenewPheromon(ants);
+
+                double path = ants.Min(x => x.ValueOfPath);
+                if (path < bestValueOfPath)
+                {
+                    bestValueOfPath = path;
+                }
+                if (k % 20 == 0)
+                {
+                    Console.WriteLine(bestValueOfPath);
+                }
             }
         }
         private List<Ant> CreateAnts()

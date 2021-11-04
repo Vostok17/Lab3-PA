@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Diagnostics;
 
 namespace traveling_salesman_problem
 {
@@ -6,10 +8,18 @@ namespace traveling_salesman_problem
     {
         static void Main(string[] args)
         {
-            Graph graph = new Graph(@"C:\Users\Artem\Desktop\ПА\Lab3\traveling salesman problem\graph.txt");
+            Stopwatch time = new Stopwatch();
+            time.Start();
+
+            Graph graph = new Graph(150);
+            graph.Fill(5, 50);
+
             Anthill anthill = new Anthill(graph);
 
             anthill.FindGoodTravel();
+            time.Stop();
+            Console.WriteLine("Lmin = {0}", anthill.Lmin);
+            Console.WriteLine(time.Elapsed);
 
             Console.ReadKey();
         }

@@ -4,11 +4,11 @@ using System.Linq;
 
 namespace traveling_salesman_problem
 {
-    internal class Ant
+    internal class Ant : IComparable<Ant>
     {
         private int location;
         private int start;
-        public List<int> Path = new();
+        public List<int> Path { get; set; } = new();
         private HashSet<int> visited = new();
         public double ValueOfPath { get; private set; }
         public Ant(int startLocation)
@@ -40,10 +40,14 @@ namespace traveling_salesman_problem
             }
             else // must return to start
             {
-                Path.Add(start);
                 ValueOfPath += distance[location, start];
             }
         }
         public int GetVisited() { return visited.Count; }
+
+        public int CompareTo(Ant other)
+        {
+            return this.ValueOfPath.CompareTo(other.ValueOfPath);
+        }
     }
 }
