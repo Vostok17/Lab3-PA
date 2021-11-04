@@ -26,13 +26,7 @@ namespace traveling_salesman_problem
         }
         private void InitPheromone(double startingPheromon)
         {
-            for (int i = 0; i < pheromone.Size; i++)
-            {
-                for (int j = i + 1; j < pheromone.Size; j++)
-                {
-                    pheromone[i, j] = pheromone[j, i] = startingPheromon;
-                }
-            }
+            pheromone.Fill(startingPheromon);
         }
         private double GreedySearch()
         {

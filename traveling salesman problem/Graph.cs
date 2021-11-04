@@ -28,7 +28,6 @@ namespace traveling_salesman_problem
             Size = size;
             Matrix = new double[Size, Size];
         }
-
         private void Read(string path)
         {
             using (StreamReader sr = new StreamReader(path))
@@ -45,6 +44,27 @@ namespace traveling_salesman_problem
                     {
                         Matrix[i, j] = double.Parse(row[j], CultureInfo.InvariantCulture);
                     }
+                }
+            }
+        }
+        public void Fill(int min, int max)
+        {
+            Random rdn = new();
+            for (int i = 0; i < Size; i++)
+            {
+                for (int j = i + 1; j < Size; j++)
+                {
+                    Matrix[i, j] = Matrix[j, i] = Convert.ToDouble(rdn.Next(min, max + 1));
+                }
+            }
+        }
+        public void Fill(double sameValue)
+        {
+            for (int i = 0; i < Size; i++)
+            {
+                for (int j = i + 1; j < Size; j++)
+                {
+                    Matrix[i, j] = Matrix[j, i] = sameValue;
                 }
             }
         }
