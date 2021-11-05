@@ -1,9 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace traveling_salesman_problem
 {
@@ -35,7 +31,7 @@ namespace traveling_salesman_problem
         {
             using StreamReader sr = new StreamReader(path);
             Size = Convert.ToInt32(sr.ReadLine());
-            Matrix = new int[Size,Size];
+            Matrix = new int[Size, Size];
 
             for (int i = 0; i < Size; i++)
             {
@@ -53,7 +49,7 @@ namespace traveling_salesman_problem
             for (int i = 0; i < Size; i++)
             {
                 for (int j = 0; j < Size; j++)
-                    sw.Write(Matrix[i,j] + " ");
+                    sw.Write(Matrix[i, j] + " ");
                 sw.WriteLine();
             }
         }

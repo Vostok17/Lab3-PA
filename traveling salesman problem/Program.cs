@@ -1,6 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Diagnostics;
 
 namespace traveling_salesman_problem
 {
@@ -14,14 +12,14 @@ namespace traveling_salesman_problem
             Graph graph = new Graph(GRAPH_SIZE);
             graph.Fill(MIN, MAX);
 
-            //Graph graph = new Graph(@"C:\Users\Artem\Desktop\ПА\Lab3\traveling salesman problem\task.dat");
-
             Anthill anthill = new Anthill(graph);
-
             anthill.FindGoodTravel();
 
-            //graph.Write(@"C:\Users\Artem\Desktop\ПА\Lab3\traveling salesman problem\task.dat");         
             Console.ReadKey();
         }
     }
 }
+
+
+//Graph graph = new Graph(@"C:\Users\Artem\Desktop\ПА\Lab3\traveling salesman problem\task.dat");
+//graph.Write(@"C:\Users\Artem\Desktop\ПА\Lab3\traveling salesman problem\task.dat");

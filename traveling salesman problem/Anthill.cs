@@ -71,7 +71,7 @@ namespace traveling_salesman_problem
         {
             Stopwatch time = new Stopwatch();
             time.Start();
-            
+
             double bestPathValue = int.MaxValue;
 
             const int ITERATIONS = 1000;
