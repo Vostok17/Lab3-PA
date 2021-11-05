@@ -13,7 +13,7 @@ namespace traveling_salesman_problem
         // algorithm properties 
         private readonly int alpha = 2;
         private readonly int beta = 3;
-        private readonly double startingPheromon = 1;
+        private readonly double startingPheromon = 2;
         private readonly double pheromonEvaporation = 0.4;
         private int Lmin;
         private readonly int numberOfAnts = 35;
@@ -94,13 +94,14 @@ namespace traveling_salesman_problem
                     bestPathValue = shortPath.ValueOfPath;
                     Result = shortPath.Path;
                 }
-                if (k % 20 == 0 || k < 10)
+                if (k % 20 == 0 || k < 20)
                 {
-                    Console.WriteLine($"{k}. {shortPath.ValueOfPath}");
+                    Console.WriteLine($"{k}. {bestPathValue}");
                 }
             }
 
             // statistics
+            Console.WriteLine("Best path value: {0}", bestPathValue);
             Console.WriteLine("Lmin = {0}", Lmin);
             foreach (var item in Result)
             {

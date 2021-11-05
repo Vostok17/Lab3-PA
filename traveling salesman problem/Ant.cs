@@ -40,7 +40,7 @@ namespace traveling_salesman_problem
             double maxProbability = double.MinValue;
             foreach (int way in possibleWays)
             {
-                double probability = Math.Pow(pheromone[location, way], alpha) * Math.Pow((double)1 / distance[location, way], beta);
+                double probability = Math.Pow(pheromone[location, way], alpha) * Math.Pow((double)1 / distance[location, way], beta) / summary;
                 if (probability > maxProbability)
                 {
                     maxProbability = probability;
