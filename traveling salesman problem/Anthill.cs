@@ -80,7 +80,7 @@ namespace traveling_salesman_problem
                 List<Ant> ants = CreateAnts();
                 foreach (var ant in ants)
                 {
-                    while (ant.GetVisited() < distance.Size) // all vertexes were visited
+                    while (ant.CanMove())
                     {
                         ant.Step(pheromone, distance, alpha, beta);
                     }
@@ -96,7 +96,7 @@ namespace traveling_salesman_problem
                 }
                 if (k % 20 == 0 || k < 10)
                 {
-                    Console.WriteLine($"{k}. {bestPathValue}");
+                    Console.WriteLine($"{k}. {shortPath.ValueOfPath}");
                 }
             }
 
@@ -116,7 +116,7 @@ namespace traveling_salesman_problem
             for (int i = 0; i < numberOfAnts; i++)
             {
                 int startLocation = random.Next(distance.Size);
-                ants.Add(new Ant(startLocation));
+                ants.Add(new Ant(startLocation, distance.Size));
             }
             return ants;
         }

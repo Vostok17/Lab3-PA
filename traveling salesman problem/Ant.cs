@@ -8,31 +8,43 @@ namespace traveling_salesman_problem
         private int location;
         private int start;
         public List<int> Path { get; set; } = new();
-        private HashSet<int> visited = new();
+        private List<int> possibleWays = new();
         public int ValueOfPath { get; private set; }
-        public Ant(int startLocation)
+        public Ant(int startLocation, int size)
         {
             start = startLocation;
             location = start;
             ValueOfPath = 0;
+            InitWays(size);
+        }
+
+        private void InitWays(int size)
+        {
+            for (int i = 0; i < size; i++)
+            {
+                if (i != start) possibleWays.Add(i);
+            }
         }
         public void Step(double[,] pheromone, Graph distance, int alpha, int beta)
         {
             Path.Add(location);
-            visited.Add(location);
+            possibleWays.Remove(location);
+
+            double summary = 0;
+            foreach (int way in possibleWays)
+            {
+                summary += Math.Pow(pheromone[location, way], alpha) * Math.Pow((double)1 / distance[location, way], beta);
+            }
 
             int nextVertex = int.MaxValue;
             double maxProbability = double.MinValue;
-            for (int i = 0; i < distance.Size; i++)
+            foreach (int way in possibleWays)
             {
-                if (!visited.Contains(i))
+                double probability = Math.Pow(pheromone[location, way], alpha) * Math.Pow((double)1 / distance[location, way], beta);
+                if (probability > maxProbability)
                 {
-                    double probability = Math.Pow(pheromone[location, i], alpha) + Math.Pow((double)1 / distance[location, i], beta);
-                    if (probability > maxProbability)
-                    {
-                        maxProbability = probability;
-                        nextVertex = i;
-                    }
+                    maxProbability = probability;
+                    nextVertex = way;
                 }
             }
 
@@ -47,7 +59,7 @@ namespace traveling_salesman_problem
                 Path.Add(start);
             }
         }
-        public int GetVisited() => visited.Count;
+        public bool CanMove() => possibleWays.Count != 0;
 
         public int CompareTo(Ant other)
         {
