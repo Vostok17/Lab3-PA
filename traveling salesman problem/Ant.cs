@@ -50,13 +50,10 @@ namespace traveling_salesman_problem
                 }
             }
 
-            if (nextVertex != int.MaxValue)
-            {
-                ValueOfPath += distance[location, nextVertex];
-                location = nextVertex;
-                Path.Add(nextVertex);
-                possibleWays.Remove(nextVertex);
-            }
+            ValueOfPath += distance[location, nextVertex];
+            location = nextVertex;
+            Path.Add(nextVertex);
+            possibleWays.Remove(nextVertex);
         }
         public bool CanMove() => possibleWays.Count != 0;
         public void ReturnToStart(Graph distance)

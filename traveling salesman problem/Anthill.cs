@@ -17,6 +17,7 @@ namespace traveling_salesman_problem
         private readonly double pheromonEvaporation = 0.4;
         private int Lmin;
         private readonly int numberOfAnts = 35;
+        private readonly double minPheromone = 0.000000001;
 
         private Random random = new Random();
         public List<int> Result { get; private set; } = new();
@@ -86,7 +87,7 @@ namespace traveling_salesman_problem
                     }
                     ant.ReturnToStart(distance);
                 }
-                RenewPheromon(ants);
+                RenewPheromone(ants);
 
                 Ant shortPath = ants.Min(); // ant with shortest path on this iteration
 
@@ -97,7 +98,7 @@ namespace traveling_salesman_problem
                 }
                 if (k % 20 == 0)
                 {
-                    Console.WriteLine($"{k}. {bestPathValue} {shortPath.Path.Count}");
+                    Console.WriteLine($"{k}. {bestPathValue}");
                 }
             }
 
@@ -122,14 +123,18 @@ namespace traveling_salesman_problem
             }
             return ants;
         }
-        private void RenewPheromon(List<Ant> ants)
+        private void RenewPheromone(List<Ant> ants)
         {
             // evaporate
             for (int i = 0; i < distance.Size; i++)
             {
                 for (int j = i + 1; j < distance.Size; j++)
                 {
-                    pheromone[i, j] = pheromone[j, i] *= 1 - pheromonEvaporation;
+                    double value = pheromone[i, j] * (1 - pheromonEvaporation);
+                    if (value > minPheromone)
+                    {
+                        pheromone[i, j] = pheromone[j, i] = value;
+                    }
                 }
             }
             //lay pheromon
