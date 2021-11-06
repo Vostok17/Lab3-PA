@@ -84,6 +84,7 @@ namespace traveling_salesman_problem
                     {
                         ant.Step(pheromone, distance, alpha, beta);
                     }
+                    ant.ReturnToStart(distance);
                 }
                 RenewPheromon(ants);
 
@@ -94,9 +95,9 @@ namespace traveling_salesman_problem
                     bestPathValue = shortPath.ValueOfPath;
                     Result = shortPath.Path;
                 }
-                if (k % 20 == 0 || k < 20)
+                if (k % 20 == 0)
                 {
-                    Console.WriteLine($"{k}. {bestPathValue}");
+                    Console.WriteLine($"{k}. {bestPathValue} {shortPath.Path.Count}");
                 }
             }
 
