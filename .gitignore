@@ -348,3 +348,7 @@ MigrationBackup/
 
 # Ionide (cross platform F# VS Code tools) working folder
 .ionide/
+
+/traveling salesman problem/task.dat
+/Гагарін.pdf
+/Гагарін.docx
